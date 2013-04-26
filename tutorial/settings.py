@@ -1,4 +1,5 @@
 # Django settings for tutorial project.
+import sys
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -11,14 +12,24 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
+        'ENGINE': 'sql_server.pyodbc',
+        'HOST': 'IT05\ELWAY',
+        'PORT': 1433,
+        'NAME': 'tutorial',
+        'USER': 'tutorial',
+        'PASSWORD': 'tutorial',
+        'OPTIONS': {
+            'driver': 'FreeTDS',
+            'host_is_server': True,
+            'extra_params': 'TDS_Version=8.0;APP=Intranet',
+            'unicode_results': True,
+            'driver_needs_utf8': False,
+        }
+    },
 }
+
+if 'test' in sys.argv:
+    DATABASES['default'] = {'ENGINE':'django.db.backends.sqlite3'}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -109,8 +120,12 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    #'/home/ryanwellman/.virtualenv/tutorial/local/lib/python2.7/site-packages/django'
+    #'P:/tutorial/templates/admin/base_site.html'
+    '/home/ryanwellman/projects/tutorial/templates'
 )
 
+#
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -119,9 +134,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'south',
+    'polls',
 )
 
 # A sample logging configuration. The only tangible logging
